@@ -4,6 +4,7 @@ package com.assignment.myplace.fragments.nearby
 import android.content.Intent
 import android.util.Log
 import com.appsynth.places.client.model.Coordinates
+import com.assignment.myplace.activities.main.MainActivity
 import com.assignment.myplace.activities.map.MapActivity
 import com.assignment.myplace.datamanagers.FavoritePlacesManager
 import com.assignment.myplace.datamanagers.NearbyPlacesManager
@@ -22,6 +23,10 @@ class NearByFragmentPresenter(private val view: INearByFragment.View) : INearByF
         val TAG = NearByFragmentPresenter::class.java.simpleName
     }
 
+    interface GeoFenceListUpdateListener {
+        fun onFavoritePlaceUpdate(places: List<Place>);
+    }
+
     val mCompositeDisposable = CompositeDisposable()
     var favoritePlacesManager : FavoritePlacesManager? = null
     var nearbyPlacesManager : NearbyPlacesManager? = null
@@ -29,10 +34,14 @@ class NearByFragmentPresenter(private val view: INearByFragment.View) : INearByF
     var nearbyPlaceList : List<Place>? = null
     var favoritePlaceList : List<Place>? = null
 
+    var geoFenceListUpdateListener : GeoFenceListUpdateListener? = null
+
     override fun onViewCreated() {
         favoritePlacesManager = FavoritePlacesManager(view.getContext())
         nearbyPlacesManager = NearbyPlacesManager(view.getContext())
         getNearbyPlaces(LatLng(13.7698016,100.5735115))
+
+        geoFenceListUpdateListener = view.getContext() as GeoFenceListUpdateListener
     }
 
 
@@ -92,6 +101,7 @@ class NearByFragmentPresenter(private val view: INearByFragment.View) : INearByF
         view.setData(places)
 
         favoritePlacesManager?.getFavoritePlaces(this, mCompositeDisposable)
+
     }
 
     override fun onNearbySearchError(throwable: Throwable) {// Implement NearbySearchListener
@@ -117,6 +127,8 @@ class NearByFragmentPresenter(private val view: INearByFragment.View) : INearByF
             newPlaceList.let {
                 view.setData(it)
             }
+            geoFenceListUpdateListener?.onFavoritePlaceUpdate(places)
+
         }else if(nearbyPlaceList != null && nearbyPlaceList?.size!! > 0){
             nearbyPlaceList?.forEach {
                 it.favorite = false

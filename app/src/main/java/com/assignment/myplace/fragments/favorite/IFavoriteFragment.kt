@@ -18,5 +18,7 @@ interface IFavoriteFragment {
         fun onViewDestroy()
         fun getFavoritPlaces()
         fun removeFavoritePlace(place : Place)
+        //fun addGeoFence(place: Place)
+        //fun deleteGeoFence(place: Place)
     }
 }

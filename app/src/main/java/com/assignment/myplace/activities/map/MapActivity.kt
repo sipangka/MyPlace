@@ -26,13 +26,8 @@ import kotlinx.android.synthetic.main.activity_map.*
 import android.view.View
 
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener,
-        GoogleMap.OnMapLongClickListener,
-        GoogleMap.OnMarkerDragListener,
-GoogleMap.OnInfoWindowClickListener,
-GoogleApiClient.ConnectionCallbacks,
-GoogleApiClient.OnConnectionFailedListener,
-IMapActivity.View{
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener
+        , IMapActivity.View{
 
     companion object {
         val TAG = MapActivity::class.java.simpleName
@@ -42,8 +37,6 @@ IMapActivity.View{
     var mPresenter: IMapActivity.Presenter? = null
 
     var mMap: GoogleMap? = null
-    var markerClicked: Boolean = false
-    var marker: Marker? = null
     var point : LatLng? = null
 
 
@@ -61,7 +54,6 @@ IMapActivity.View{
     }
 
     override fun getExtras() {
-        intent.hasExtra(LOCATION_KEY)
         if(intent.hasExtra(LOCATION_KEY)){
             point = intent.getParcelableExtra(LOCATION_KEY)
         }
@@ -88,94 +80,17 @@ IMapActivity.View{
         buttonSelectLocation.setOnClickListener(View.OnClickListener { mPresenter?.getCurrentLocation()})
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mPresenter?.onMapReady()
+        mPresenter?.onMapReady(point)
     }
 
 
     //////////////////////////////////////////////////////////////////
 
-
-    private fun pinPoint(point: LatLng) {
-
-        if (mMap != null) {
-            if (marker != null) {
-                marker!!.remove()
-            }
-
-            markerClicked = false
-
-            mMap?.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
-            mMap?.setOnInfoWindowClickListener(this)
-
-            // create marker
-            val markerOptions = MarkerOptions().position(point).draggable(false).title("Hello Maps")
-            //marker = new MarkerOptions().position(point).draggable(true).title("Hello Maps");
-
-            // Changing marker icon
-            // set yours icon here
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_pin_blue))
-
-            marker = mMap?.addMarker(markerOptions)
-            marker?.showInfoWindow()
-
-            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(point, 15f))
-            // Zoom in the Google Map
-            mMap?.animateCamera(CameraUpdateFactory.zoomTo(15f))
-        }
-
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////
-
-
     override fun onMapClick(p0: LatLng?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun onMapLongClick(p0: LatLng?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
-    override fun onMarkerDragEnd(p0: Marker?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onMarkerDragStart(p0: Marker?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onMarkerDrag(p0: Marker?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onInfoWindowClick(p0: Marker?) {
-        Toast.makeText(this, "Click.", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onConnected(p0: Bundle?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun initMap(location: LatLng) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

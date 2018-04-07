@@ -19,7 +19,7 @@ interface IMapActivity {
     }
 
     interface Presenter : BasePresenter {
-        fun onMapReady()
+        fun onMapReady(point: LatLng?)
         fun onMapCameraMove(point : LatLng?)
         fun getCurrentLocation()
         fun getAddress()

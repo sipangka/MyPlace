@@ -12,14 +12,17 @@ import android.support.v4.view.ViewPager
 import com.assignment.myplace.R
 import com.assignment.myplace.base.BaseActivity
 import com.assignment.myplace.adapters.ViewPagerAdapter
+import com.assignment.myplace.fragments.favorite.FavoriteFragmentPresenter
+import com.assignment.myplace.fragments.nearby.NearByFragmentPresenter
+import com.assignment.myplace.persistence.Place
 import com.assignment.myplace.utils.Alert
 import com.assignment.myplace.utils.PermissionUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-
-
-class MainActivity : BaseActivity(), IMainActivity.View {
+class MainActivity : BaseActivity(), IMainActivity.View
+        , FavoriteFragmentPresenter.GeoFenceListUpdateListener
+        , NearByFragmentPresenter.GeoFenceListUpdateListener{
 
     val TAG = MainActivity::class.java.simpleName
 
@@ -93,12 +96,24 @@ class MainActivity : BaseActivity(), IMainActivity.View {
     }
 
     override fun getContext(): Context {
-        return this
+        return this@MainActivity
+    }
+
+    override fun onResume() {
+        mPresenter?.viewOnResume()
+        super.onResume()
     }
 
     override fun onDestroy() {
         mPresenter?.viewOnDestroy()
         super.onDestroy()
 
+    }
+
+    /**
+     * Implement FavoriteFragmentPresenter.GeoFenceListUpdate
+     */
+    override fun onFavoritePlaceUpdate(places: List<Place>) {
+        mPresenter?.addGeoFenceList(places)
     }
 }

@@ -29,6 +29,7 @@ class FavoriteFragment : BaseFragment() , IFavoriteFragment.View , PlacesRecycle
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUserVisibleHint(false);
         mPresenter = FavoriteFragmentPresenter(this)
 
         linearLayoutManager = LinearLayoutManager(activity)
@@ -37,6 +38,15 @@ class FavoriteFragment : BaseFragment() , IFavoriteFragment.View , PlacesRecycle
         placeRecyclerView.adapter = mAdapter;
 
         mPresenter?.onViewCreated()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            mPresenter?.getFavoritPlaces()
+        } else {
+
+        }
     }
 
     override fun onDestroy() {

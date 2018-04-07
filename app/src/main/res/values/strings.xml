@@ -13,4 +13,11 @@
     <string name="dialog_request_permission">Please grant access to your location to use this app.</string>
     <string name="dialog_permission_denied_title">Permission denied</string>
     <string name="dialog_permission_denied_desc">You need to grant all permissions to use this app.</string>
+
+    <!-- Notification -->
+    <string name="Notification.Text">We\'re at %1$s!!!</string>
+
+    <!-- Toast -->
+    <string name="Toast.Error">There was an error. Please try again.</string>
+    <string name="Toast.Update">Geofence update.</string>
 </resources>

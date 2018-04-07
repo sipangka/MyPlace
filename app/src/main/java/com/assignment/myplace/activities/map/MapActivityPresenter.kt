@@ -58,12 +58,13 @@ class MapActivityPresenter(private val view: IMapActivity.View) : IMapActivity.P
 
     }
 
-    override fun onMapReady() {
+    override fun onMapReady(point: LatLng?) {
+        this.point = point
         if(point == null){
-            point = LatLng(13.7698016,100.5735115)//appsynth
+            this.point = LatLng(13.7698016,100.5735115)//appsynth
         }
 
-        view.initMap(point!!)
+        view.initMap(this.point!!)
         getAddress()
     }
 
