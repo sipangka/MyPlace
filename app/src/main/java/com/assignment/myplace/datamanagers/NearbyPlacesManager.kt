@@ -24,7 +24,7 @@ class NearbyPlacesManager(val context: Context, var radius : Int = 1000) {
     val apiKey: String
 
     init {
-        apiKey = context.getString(R.string.google_map_api_key)
+        apiKey = context.getString(R.string.google_maps_key_restrictions_none)
     }
 
     fun generateNearbyPlacesParamsHashMap(coordinates: Coordinates, radius: Int): java.util.HashMap<String, String> {

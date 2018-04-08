@@ -44,5 +44,27 @@ object PermissionUtils {
         }
     }
 
+    /**
+     *
+     * @param activity
+     * @return true if app already has permission
+     */
+    fun requestPermissions(activity: Activity, vararg permissions: String): Boolean {
+        val hasLocationPermission = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+
+
+        if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                AlertDialog.Builder(activity).setTitle(R.string.dialog_information)
+                        .setMessage(R.string.dialog_request_permission)
+                        .setPositiveButton(android.R.string.ok) { dialog, which -> ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE_ASK_PERMISSIONS) }.setCancelable(false).show()
+                return false
+            }
+            ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE_ASK_PERMISSIONS)
+            return false
+        }
+        return true
+    }
+
 
 }

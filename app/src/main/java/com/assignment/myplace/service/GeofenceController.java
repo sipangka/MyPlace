@@ -34,8 +34,6 @@ import java.util.Map;
 
 public class GeofenceController {
 
-    // region Properties
-
     private final String TAG = GeofenceController.class.getName();
 
     public interface GeofenceControllerListener {
@@ -46,18 +44,10 @@ public class GeofenceController {
     private Context context;
     private GeofenceControllerListener listener;
     private List<Place> placeGeofences;
-
-    public List<Place> getPlaceGeofences() {
-        return placeGeofences;
-    }
-
     private List<Geofence> mGeofenceList = new ArrayList<Geofence>();
-
     private GeofencingClient mGeofencingClient;
     private PendingIntent mGeofencePendingIntent;
     private boolean startMonitoring = false;
-
-
     private static GeofenceController INSTANCE;
 
     public static GeofenceController getInstance() {
@@ -67,6 +57,9 @@ public class GeofenceController {
         return INSTANCE;
     }
 
+    public List<Place> getPlaceGeofences() {
+        return placeGeofences;
+    }
 
     public void init(Context context, List<Place> places, GeofenceControllerListener listener) {
         this.context = context.getApplicationContext();
@@ -111,7 +104,7 @@ public class GeofenceController {
         }
         Intent intent = new Intent(context, GeofenceIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
+        // calling addGeofences() and stopGeoFences().
         mGeofencePendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
         return mGeofencePendingIntent;
@@ -159,6 +152,7 @@ public class GeofenceController {
                         // Geofences removed
                         Log.d(TAG, "removeGeofences success");
                         startMonitoring = false;
+                        listener.onGeofencesUpdated();
                     }
                 })
                 .addOnFailureListener( new OnFailureListener() {
@@ -166,6 +160,7 @@ public class GeofenceController {
                     public void onFailure(@NonNull Exception e) {
                         // Failed to remove geofences
                         Log.e(TAG, "removeGeofences fail", e);
+                        listener.onError(e);
                     }
                 });
     }

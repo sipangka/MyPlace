@@ -55,7 +55,7 @@ class FavoriteFragment : BaseFragment() , IFavoriteFragment.View , PlacesRecycle
     }
 
     override fun onResume() {
-        mPresenter?.getFavoritPlaces()
+        //mPresenter?.getFavoritPlaces()
         super.onResume()
     }
 

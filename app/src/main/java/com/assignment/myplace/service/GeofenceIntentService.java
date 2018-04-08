@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -103,6 +104,8 @@ public class GeofenceIntentService extends IntentService {
             .setContentIntent(pendingNotificationIntent)
             .setStyle(new NotificationCompat.BigTextStyle().bigText(contextText))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+            .setLights(Color.GREEN, 3000, 3000)
             .setAutoCancel(true);
     notificationManager.notify(0, builder.build());
 

@@ -21,7 +21,7 @@ class GeocodeManager(val context : Context) {
     val apiKey: String
 
     init {
-        apiKey = context.getString(R.string.google_map_api_key)
+        apiKey = context.getString(R.string.google_maps_key_restrictions_none)
     }
 
     fun generateGeocodeParamsHashMap(coordinates: Coordinates): java.util.HashMap<String, String> {

@@ -45,9 +45,13 @@ class FavoriteFragmentPresenter(private val view: IFavoriteFragment.View) : IFav
      * Implement FavoritePlacesManager.Listener
      */
     override fun onFavoritePlacesResultsReady(places: List<Place>) {// Implement NearbySearchListener
+
         view.setData(places)
-        GeofenceController.getInstance().placeGeofences = places
-        geoFenceListUpdateListener?.onFavoritePlaceUpdate(places)
+
+        if(!favoritePlaceList?.equals(places)!!){
+            geoFenceListUpdateListener?.onFavoritePlaceUpdate(places)
+        }
+        favoritePlaceList = places
     }
 
     override fun onFavoritePlacesError(throwable: Throwable) {// Implement NearbySearchListener

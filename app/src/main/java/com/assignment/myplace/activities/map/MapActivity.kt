@@ -7,23 +7,18 @@ import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import android.util.Log
-import android.widget.Toast
+import android.support.v7.widget.Toolbar
 import com.assignment.myplace.R
-import com.assignment.myplace.adapters.CustomInfoWindowAdapter
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.LatLng
 import android.widget.RelativeLayout
-import kotlinx.android.synthetic.main.activity_map.*
 import android.view.View
+import kotlinx.android.synthetic.main.activity_map.*
+import kotlinx.android.synthetic.main.content_map.*
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener
@@ -43,7 +38,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+        setSupportActionBar(toolbar as Toolbar?)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        (toolbar as Toolbar?)?.setNavigationOnClickListener(View.OnClickListener {
+            // back button pressed
+            onBackPressed();
+        })
+
+
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -61,18 +66,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
 
     override fun init(){
         var params = RelativeLayout.LayoutParams(markerLayout.layoutParams.width, markerLayout.layoutParams.height)
-        rootLayout.post(Runnable {
-            val height = rootLayout.getHeight()
-            val weight = rootLayout.getWidth()
+        contentLayout.post(Runnable {
+            val height = contentLayout.getHeight()
+            val weight = contentLayout.getWidth()
 
             val h = markerLayout.height
             val w = markerLayout.width
 
             params.leftMargin = ((weight/2).toInt() - w/2)
-            params.topMargin = ((height/2).toInt() - h)
+            params.topMargin = (((height)/2).toInt() - h)
 
-            rootLayout.removeView(markerLayout)
-            rootLayout.addView(markerLayout, params)
+            contentLayout.removeView(markerLayout)
+            contentLayout.addView(markerLayout, params)
 
         })
 

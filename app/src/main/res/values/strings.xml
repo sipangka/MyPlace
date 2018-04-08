@@ -6,7 +6,6 @@
     <!-- Map -->
     <string name="map_select_location">Select Location</string>
     <string name="address_title">Address</string>
-    <string name="google_map_api_key">AIzaSyB5FsnYOxn2gYoh0enncKUUZUB2YP4Z2II</string>
 
     <!-- Dialog -->
     <string name="dialog_information">Information</string>
